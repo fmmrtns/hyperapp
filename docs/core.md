@@ -102,10 +102,12 @@ Use the [state](/docs/api.md#state) to describe your application's data model.
 
 ```jsx
 app({
-  state: ["Hi", "Hola", "Bonjour"],
+  state: {
+    breads: ["Pita", "Naan", "Pumpernickel"]
+  },
   view: state => (
     <ul>
-      {state.map(hello => <li>{hello}</li>)}
+      {state.breads.map(bread => <li>{bread}</li>)}
     </ul>
   )
 })
@@ -244,7 +246,7 @@ app({
     move: (state, { x, y }) => ({ x, y })
   },
   events: {
-    ready: (state, actions) =>
+    init: (state, actions) =>
       addEventListener("mousemove", e =>
         actions.move({
           x: e.clientX,

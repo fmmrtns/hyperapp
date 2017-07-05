@@ -42,7 +42,7 @@ Below is an alphabetical list of some of the terms and concepts used throughout 
 [hyperxify](https://github.com/substack/hyperxify)<br>
 
 ##### I
-[import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)<br>
+[events.init](/docs/api.md#init)<br>
 [installation](/docs/getting-started.md#installation)<br>
 
 ##### J
@@ -78,7 +78,6 @@ Below is an alphabetical list of some of the terms and concepts used throughout 
 [require](https://nodejs.org/api/modules.html#modules_module_require_id)<br>
 [root](/docs/core.md#root)<br>
 [events.route](https://github.com/hyperapp/router#route)<br>
-[events.ready](/docs/api.md#ready)<br>
 [rollup](https://github.com/rollup/rollup)<br>
 
 ##### S

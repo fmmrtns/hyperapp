@@ -1,14 +1,18 @@
 export function app(app) {
   var state = {}
-  var view = app.view
   var actions = {}
   var events = {}
+  var mixins = []
+  var view = app.view
   var root = app.root || document.body
   var node
   var element
+  var locked = false
+  var loaded = false
 
-  for (var i = -1, mixins = []; i < mixins.length; i++) {
+  for (var i = -1; i < mixins.length; i++) {
     var mixin = mixins[i] ? mixins[i](emit) : app
+
     mixins = mixins.concat(mixin.mixins || [])
 
     if (mixin.state != null) {
@@ -22,17 +26,31 @@ export function app(app) {
     })
   }
 
-  emit("ready", render(state, view))
+  render()
+
+  emit("init")
 
   return emit
 
-  function render(state, view) {
-    element = patch(
-      root,
-      element,
-      node,
-      (node = emit("render", view)(state, actions))
-    )
+  function render() {
+    if (!locked) {
+      locked = !locked
+
+      requestAnimationFrame(function() {
+        element = patch(
+          root,
+          element,
+          node,
+          (node = emit("render", view)(state, actions))
+        )
+
+        locked = !locked
+
+        if (!loaded) {
+          emit("loaded", element, (loaded = true))
+        }
+      })
+    }
   }
 
   function init(namespace, children, lastName) {
@@ -52,7 +70,8 @@ export function app(app) {
           )
 
           if (result != null && typeof result.then !== "function") {
-            render((state = merge(state, emit("update", result))), view)
+            state = merge(state, emit("update", result))
+            render()
           }
 
           return result
@@ -75,15 +94,16 @@ export function app(app) {
   }
 
   function merge(a, b) {
-    var obj = {}
-
-    if (typeof b !== "object" || Array.isArray(b)) {
+    if (typeof b !== "object") {
       return b
     }
+
+    var obj = {}
 
     for (var i in a) {
       obj[i] = a[i]
     }
+
     for (var i in b) {
       obj[i] = b[i]
     }
